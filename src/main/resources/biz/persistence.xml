@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns="http://www.springframework.org/schema/beans" xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       ">
+
+	<!-- 配置DataSource数据源 -->
+	<bean id="tDataSource" class="com.taobao.tddl.client.jdbc.TDataSource" init-method="init">
+		<property name="appName" value="${tddl.app-name}" />
+		<property name="dynamicRule" value="true" />
+	</bean>
+
+	<!-- 配置SqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 数据源 -->
+		<property name="dataSource" ref="tDataSource" />
+		<!-- XML映射文件的路径 -->
+		<property name="mapperLocations" value="classpath:/mybatis/*.xml" />
+	</bean>
+
+	<!-- 配置Mapper映射器 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 自动扫描指定包 -->
+		<property name="basePackage" value="cheche.dal.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+
+	<!-- 配置Spring JDBC事务管理 -->
+	<bean id="transactionManager"
+		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="tDataSource" />
+	</bean>
+
+	<!-- 启用Spring声明式事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+</beans>

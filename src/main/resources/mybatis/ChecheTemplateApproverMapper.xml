@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cheche.dal.dao.ChecheTemplateApproverMapper">
+	<resultMap id="BaseResultMap" type="cheche.dal.entity.ChecheTemplateApprover">
+    <!--
+      WARNING - @mbg.generated
+    -->
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="template_id" jdbcType="BIGINT" property="templateId" />
+		<result column="class_name" jdbcType="VARCHAR" property="className" />
+		<result column="type" jdbcType="INTEGER" property="type" />
+		<result column="role_id" jdbcType="INTEGER" property="roleId" />
+		<result column="user" jdbcType="VARCHAR" property="user" />
+		<result column="role" jdbcType="VARCHAR" property="role" />
+		<result column="admin" jdbcType="VARCHAR" property="admin" />
+		<result column="is_deleted" jdbcType="CHAR" property="isDeleted" />
+		<result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+		<result column="modifier" jdbcType="VARCHAR" property="modifier" />
+	</resultMap>
+
+	<delete id="deleteAll">
+		DELETE FROM cheche_template_approver WHERE template_id = #{templateId}
+	</delete>
+
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO cheche_template_approver(template_id, class_name, `type`, step, role_id, `user`, role, admin)
+		VALUES
+		<foreach collection="list" item="item" separator=",">
+			(#{item.templateId,jdbcType=BIGINT},#{item.className,jdbcType=VARCHAR},#{item.type,jdbcType=INTEGER},#{item.step,jdbcType=INTEGER},#{item.roleId,jdbcType=INTEGER},#{item.user,jdbcType=VARCHAR},#{item.role,jdbcType=VARCHAR},#{item.admin,jdbcType=VARCHAR})
+		</foreach>
+	</insert>
+
+</mapper>

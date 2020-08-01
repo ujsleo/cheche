@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cheche.dal.dao.ChecheApplyProcessMapper">
+	<resultMap id="BaseResultMap" type="cheche.dal.entity.ChecheApplyProcess">
+    <!--
+      WARNING - @mbg.generated
+    -->
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="code" jdbcType="VARCHAR" property="code" />
+		<result column="sn" jdbcType="VARCHAR" property="sn" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="step" jdbcType="INTEGER" property="step" />
+		<result column="template_code" jdbcType="VARCHAR" property="templateCode" />
+		<result column="biz_code" jdbcType="VARCHAR" property="bizCode" />
+		<result column="user" jdbcType="VARCHAR" property="user" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+		<result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+		<result column="is_deleted" jdbcType="CHAR" property="isDeleted" />
+		<result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+		<result column="modifier" jdbcType="VARCHAR" property="modifier" />
+	</resultMap>
+
+	<select id="findByCode" resultMap="BaseResultMap">
+		SELECT * FROM cheche_apply_process WHERE code=#{code}
+	</select>
+
+	<select id="findMyApply" resultType="cheche.core.dto.approval.MyApplySummary">
+		SELECT cap.id processId, cap.sn sn, cap.status processStatus, cap.user applyUser, cap.title title, cap.gmt_created applyDate, ct.name templateName,
+			(SELECT group_concat(cats.`user`)
+			FROM cheche_apply_task_spot cats
+			WHERE cats.process_id = cap.id AND cats.step = cap.step) approver
+		FROM cheche_apply_process cap
+		LEFT JOIN cheche_template ct ON cap.template_code = ct.code
+		WHERE cap. USER = #{user}
+		<if test="status != null">
+			AND cap.status = #{status}
+		</if>
+		<if test="templateCode != null">
+			AND cap.template_code = #{templateCode}
+		</if>
+		ORDER BY cap.gmt_created DESC
+		LIMIT #{offset}, #{rows}
+	</select>
+
+	<select id="cntTotalApply" resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		FROM cheche_apply_process cap
+		WHERE cap. USER = #{user}
+		<if test="status != null">
+			AND cap.status = #{status}
+		</if>
+		<if test="templateCode != null">
+			AND cap.template_code = #{templateCode}
+		</if>
+	</select>
+
+	<update id="completed">
+		UPDATE cheche_apply_process SET status = 16 WHERE id = #{id}
+	</update>
+
+	<update id="terminated">
+		UPDATE cheche_apply_process SET status = 8 AND step = #{step} WHERE id = #{id}
+	</update>
+
+	<update id="withdraw">
+		UPDATE cheche_apply_process SET status = 0 AND step = 0 WHERE id = #{id}
+	</update>
+
+	<update id="updateStep">
+		UPDATE cheche_apply_process SET step = #{step} WHERE id = #{id}
+	</update>
+
+</mapper>

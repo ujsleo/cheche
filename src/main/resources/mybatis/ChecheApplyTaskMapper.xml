@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cheche.dal.dao.ChecheApplyTaskMapper">
+	<resultMap id="BaseResultMap" type="cheche.dal.entity.ChecheApplyTask">
+    <!--
+      WARNING - @mbg.generated
+    -->
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="process_id" jdbcType="BIGINT" property="processId" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="class_name" jdbcType="VARCHAR" property="className" />
+		<result column="type" jdbcType="INTEGER" property="type" />
+		<result column="step" jdbcType="INTEGER" property="step" />
+		<result column="is_deleted" jdbcType="CHAR" property="isDeleted" />
+		<result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+		<result column="modifier" jdbcType="VARCHAR" property="modifier" />
+	</resultMap>
+
+	<update id="pass">
+		UPDATE cheche_apply_task SET status = 16 WHERE id = #{id}
+	</update>
+
+	<delete id="reject">
+		DELETE FROM cheche_apply_task WHERE process_id = #{processId} AND step BETWEEN #{fromStep} AND #{toStep}
+	</delete>
+
+	<delete id="withdraw">
+		DELETE FROM cheche_apply_task WHERE process_id = #{processId}
+	</delete>
+</mapper>

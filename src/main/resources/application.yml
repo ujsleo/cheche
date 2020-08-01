@@ -1,0 +1,12 @@
+########
+# cheche业务审批编排框架
+########
+# 是否激活demo配置
+cheche:
+  demo: true
+
+# 数据库中间件TDDL配置
+tddl:
+  enabled: true
+  app-name: CHECHE
+  group-name: JIE

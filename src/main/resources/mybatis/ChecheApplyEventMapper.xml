@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cheche.dal.dao.ChecheApplyEventMapper">
+	<resultMap id="BaseResultMap" type="cheche.dal.entity.ChecheApplyEvent">
+    <!--
+      WARNING - @mbg.generated
+    -->
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="process_id" jdbcType="BIGINT" property="processId" />
+		<result column="type" jdbcType="INTEGER" property="type" />
+		<result column="user" jdbcType="VARCHAR" property="user" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="is_deleted" jdbcType="CHAR" property="isDeleted" />
+		<result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+		<result column="modifier" jdbcType="VARCHAR" property="modifier" />
+	</resultMap>
+
+	<select id="findAll" resultMap="BaseResultMap">
+	    SELECT id, process_id, `type`, `user`, remark, is_deleted, gmt_created, creator, gmt_modified, modifier
+		FROM cheche_apply_event
+		WHERE process_id=#{processId}
+		ORDER BY gmt_created DESC
+	</select>
+
+</mapper>
