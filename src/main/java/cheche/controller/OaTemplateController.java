@@ -8,64 +8,61 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import cheche.common.utils.JsonUtils;
+import cheche.common.utils.LogUtils;
+import cheche.controller.constant.ApiConst;
 import cheche.controller.vo.OaTemplateGetResponse;
 import cheche.controller.vo.OaTemplateLstResponse;
 import cheche.core.service.OaTemplateSvc;
-import common.util.tools.JsonUtils;
-import common.util.tools.LogUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 /**
- * 业务审批模板Controller
+ * 审批模板Controller
  * 
  * @author jieli
  *
  */
-@Api(tags = "业务审批模板")
+@Api(tags = "审批模板")
 @RestController
-@RequestMapping("/oa/template")
+@RequestMapping(ApiConst.UA + "/template")
 public class OaTemplateController {
 	private final static Logger log = LoggerFactory.getLogger(OaTemplateController.class);
 	@Autowired
-	private OaTemplateSvc templateSvc;
+	private OaTemplateSvc svc;
 
-	/** 获取模板详情 */
 	@ApiOperation(value = "获取模板详情")
 	@GetMapping(value = "/get")
-	public OaTemplateGetResponse get(@RequestParam(value = "templateCode") String request) {
+	public OaTemplateGetResponse get(@ApiParam(value = "模板CODE", required = true) //
+	@RequestParam(value = "templateCode") String request) {
 		String title = "OaTemplateGet";
-		log.info(LogUtils.requestPattern(), title, request);
+		log.info(LogUtils.requestPattern(title), request);
 		OaTemplateGetResponse response = new OaTemplateGetResponse();
 		try {
-			response.setValue(templateSvc.getTemplateContent(request));
+			response.setValue(svc.detail(request));
 		} catch (Exception e) {
 			log.info(LogUtils.errorPattern(title), e);
 			response.exceptionHandler(e);
 		}
-		log.info(LogUtils.responsePattern(), title, JsonUtils.convert2Json(response));
+		log.info(LogUtils.responsePattern(title), JsonUtils.toJSONString(response));
 		return response;
 	}
 
-	/**
-	 * 获取模板列表
-	 * 
-	 * @param request 模板状态：null-全部 0-已停用 1-已启用
-	 * @return
-	 */
 	@ApiOperation(value = "获取模板列表")
 	@GetMapping(value = "/lst")
-	public OaTemplateLstResponse lst(@RequestParam(value = "status", required = false) Integer request) {
+	public OaTemplateLstResponse lst(@ApiParam(value = "模板状态：null-全部 0-已停用 1-已启用") //
+	@RequestParam(value = "status", required = false) Integer request) {
 		String title = "OaTemplateLst";
-		log.info(LogUtils.requestPattern(), title, request);
+		log.info(LogUtils.requestPattern(title), request);
 		OaTemplateLstResponse response = new OaTemplateLstResponse();
 		try {
-			response.setValue(templateSvc.getTemplateLst(request));
+			response.setValue(svc.lst(request));
 		} catch (Exception e) {
 			log.info(LogUtils.errorPattern(title), e);
 			response.exceptionHandler(e);
 		}
-		log.info(LogUtils.responsePattern(), title, JsonUtils.convert2Json(response));
+		log.info(LogUtils.responsePattern(title), JsonUtils.toJSONString(response));
 		return response;
 	}
 }

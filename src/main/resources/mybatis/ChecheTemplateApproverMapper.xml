@@ -24,12 +24,4 @@
 		DELETE FROM cheche_template_approver WHERE template_id = #{templateId}
 	</delete>
 
-	<insert id="batchInsert" parameterType="java.util.List">
-		INSERT INTO cheche_template_approver(template_id, class_name, `type`, step, role_id, `user`, role, admin)
-		VALUES
-		<foreach collection="list" item="item" separator=",">
-			(#{item.templateId,jdbcType=BIGINT},#{item.className,jdbcType=VARCHAR},#{item.type,jdbcType=INTEGER},#{item.step,jdbcType=INTEGER},#{item.roleId,jdbcType=INTEGER},#{item.user,jdbcType=VARCHAR},#{item.role,jdbcType=VARCHAR},#{item.admin,jdbcType=VARCHAR})
-		</foreach>
-	</insert>
-
 </mapper>

@@ -3,17 +3,18 @@ package cheche.controller.vo;
 import java.util.List;
 
 import cheche.core.dto.approval.MyApprovalSummary;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
- * 我审批的Response
+ * （处理人）获取'我审批的'Response
  * 
- * 返回值："我审批的"审批摘要
+ * 返回值：'我审批的'审批摘要
  * 
  * @author jieli
  *
  */
 public class OaMyApprovalResponse extends BaseResponse<List<MyApprovalSummary>> {
-	/** 总数 */
+    @ApiModelProperty(value = "总数")
 	private Integer total;
 
 	public Integer getTotal() {

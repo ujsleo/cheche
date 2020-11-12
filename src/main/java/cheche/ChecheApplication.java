@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ImportResource;
 
-import common.util.tools.context.ContextUtils;
+import cheche.common.utils.ContextUtils;
 
 /**
  * cheche业务审批编排框架

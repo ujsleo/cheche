@@ -33,13 +33,13 @@
 	</resultMap>
 
 	<select id="findApplyContents" resultType="cheche.core.dto.template.ControlItem">
-		SELECT id, `type`, `name`, label, `value`, placeholder, `require`, config
+		SELECT id, `type`, `name`, label, `value`, placeholder, `require`, config configJson
 		FROM cheche_template_control
 		WHERE template_id = #{templateId}
 	</select>
 
 	<select id="findApprovers" resultType="cheche.core.dto.template.ApproverItem">
-		SELECT class_name className, `type`, step, `user`, role, admin
+		SELECT id, class_name className, `type`, step, `user`, role, admin
 		FROM cheche_template_approver
 		WHERE template_id = #{templateId}
 		ORDER BY step ASC
@@ -49,7 +49,7 @@
 		SELECT ct.id templateId, ct.code code, ct.status status, ct.name name, ct.icon icon, ct.group_id groupId, ctg.name groupName
 		FROM cheche_template ct
 		LEFT JOIN cheche_template_group ctg ON ct.group_id = ctg.id
-		WHERE CODE = #{code} AND status = 1
+		WHERE ct.code = #{code}
 	</select>
 
 	<select id="findLst" resultType="cheche.core.dto.template.TemplateInfo">
@@ -60,6 +60,7 @@
 		<if test="status != null">
 			AND status = #{status}
 		</if>
+		ORDER BY ct.group_id ASC
 	</select>
 
 	<select id="findByCode" resultMap="BaseResultMap">
@@ -73,9 +74,4 @@
 	<update id="disable">
 		UPDATE cheche_template SET status = 0 WHERE code = #{code}
 	</update>
-
-	<delete id="deleteByCode">
-		DELETE FROM cheche_template WHERE code = #{code}
-	</delete>
-
 </mapper>

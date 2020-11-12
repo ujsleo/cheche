@@ -7,15 +7,17 @@ package cheche.core.dto.constant;
  *
  */
 public enum ApplyProcessStatus {
+	/** 撤回（已撤销） */
+	WITHDRAWED(-1, "已撤销"), //
 	/** 草稿 */
 	DRAFT(0, "草稿"), //
-	/** 处理中 */
+	/** 处理中（审批中） */
 	IN_PROGRESS(1, "处理中"), //
 	/** 挂起 */
 	SUSPENDED(4, "挂起"), //
-	/** 终止 */
+	/** 终止（已驳回） */
 	TERMINATED(8, "终止"), //
-	/** 成功 */
+	/** 成功（已通过） */
 	COMPLETED(16, "成功"), //
 	;
 
@@ -37,7 +39,7 @@ public enum ApplyProcessStatus {
 
 	/** 是否可以再次发起 */
 	public static boolean canReApply(int value) {
-		return value == DRAFT.getValue() || value == TERMINATED.getValue();
+		return value == WITHDRAWED.getValue() || value == TERMINATED.getValue();
 	}
 
 	/** 是否可以撤回 */

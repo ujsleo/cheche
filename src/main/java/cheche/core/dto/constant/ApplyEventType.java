@@ -1,7 +1,7 @@
 package cheche.core.dto.constant;
 
 /**
- * 审批事件状态
+ * 审批事件类型
  * 
  * @author jieli
  *

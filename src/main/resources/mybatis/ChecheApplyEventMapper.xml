@@ -17,11 +17,9 @@
 		<result column="modifier" jdbcType="VARCHAR" property="modifier" />
 	</resultMap>
 
-	<select id="findAll" resultMap="BaseResultMap">
-	    SELECT id, process_id, `type`, `user`, remark, is_deleted, gmt_created, creator, gmt_modified, modifier
-		FROM cheche_apply_event
-		WHERE process_id=#{processId}
-		ORDER BY gmt_created DESC
+	<select id="findLst" resultMap="BaseResultMap">
+	    SELECT * FROM cheche_apply_event
+		WHERE process_id = #{processId}
 	</select>
 
 </mapper>

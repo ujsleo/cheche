@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import cheche.core.exception.ChecheException;
 import cheche.core.exception.ChecheExceptionEnum;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Base Response
@@ -13,14 +14,20 @@ import cheche.core.exception.ChecheExceptionEnum;
  * @param <T> 返回值的数据类型
  */
 public class BaseResponse<T> {
-	/** 返回值 */
+    @ApiModelProperty(value = "返回值")
 	private T value = null;
-	/** 是否成功 */
+    @ApiModelProperty(value = "是否成功")
 	private Boolean success = true;
-	/** 错误码 */
+    @ApiModelProperty(value = "错误码")
 	private String errorCode = ChecheExceptionEnum.OK.getErrorCode();
-	/** 错误信息 */
+    @ApiModelProperty(value = "错误信息")
 	private String errorMsg = ChecheExceptionEnum.OK.getErrorMsg();
+    
+    public void fail(String errorMsg) {
+        this.success = false;
+        this.errorCode = ChecheExceptionEnum.E500.getErrorCode();
+        this.errorMsg = errorMsg;
+    }
 
 	/** 异常处理 */
 	public void exceptionHandler(Exception e) {
@@ -69,5 +76,9 @@ public class BaseResponse<T> {
 
 	public String getErrorMsg() {
 		return errorMsg;
+	}
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
 	}
 }

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.1.RELEASE</version>
+		<version>1.5.7.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>jie</groupId>
@@ -30,41 +30,33 @@
 			<artifactId>spring-tx</artifactId>
 		</dependency>
 
-		<!-- apache commons -->
+		<!-- Apache commons -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
+			<version>3.11</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
-			<version>3.2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 		</dependency>
-		<!-- javax.validation -->
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-		</dependency>
 
-		<!-- Groovy -->
-		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy-jsr223</artifactId>
-		</dependency>
-
-		<!-- Fastjson -->
+		<!-- fastjson -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.61</version>
+			<version>1.2.75</version>
+		</dependency>
+
+		<!-- FreeMarker -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.29</version>
 		</dependency>
 
 		<!-- MyBatis -->
@@ -96,51 +88,6 @@
 			<version>2.7.0</version>
 		</dependency>
 
-		<!-- 淘宝TDDL -->
-		<dependency>
-			<groupId>com.taobao.tddl</groupId>
-			<artifactId>tddl-sequence</artifactId>
-			<version>3.5.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.taobao.tddl</groupId>
-			<artifactId>tddl-client</artifactId>
-			<version>3.3.2.4</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-				<exclusion>
-					<artifactId>log4j-over-slf4j</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>slf4j-log4j12</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>log4j</artifactId>
-					<groupId>log4j</groupId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<!-- diamond -->
-		<dependency>
-			<groupId>com.taobao.diamond</groupId>
-			<artifactId>diamond-client</artifactId>
-			<version>3.6.8</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>log4j</artifactId>
-					<groupId>log4j</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 	</dependencies>
 
 	<build>

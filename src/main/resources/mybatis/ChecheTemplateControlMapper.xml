@@ -25,12 +25,4 @@
 		DELETE FROM cheche_template_control WHERE template_id = #{templateId}
 	</delete>
 
-	<insert id="batchInsert" parameterType="java.util.List">
-		INSERT INTO cheche_template_control(template_id, `type`, `name`, label, `value`, placeholder, `require`, config)
-		VALUES
-		<foreach collection="list" item="item" separator=",">
-			(#{item.templateId,jdbcType=BIGINT},#{item.type,jdbcType=VARCHAR},#{item.name,jdbcType=VARCHAR},#{item.label,jdbcType=VARCHAR},#{item.value,jdbcType=VARCHAR},#{item.placeholder,jdbcType=VARCHAR},#{item.require,jdbcType=INTEGER},#{item.config,jdbcType=VARCHAR})
-		</foreach>
-	</insert>
-
 </mapper>

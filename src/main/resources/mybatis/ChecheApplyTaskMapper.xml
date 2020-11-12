@@ -19,7 +19,7 @@
 	</resultMap>
 
 	<update id="pass">
-		UPDATE cheche_apply_task SET status = 16 WHERE id = #{id}
+		UPDATE cheche_apply_task SET status = 16, modifier = #{user} WHERE id = #{id}
 	</update>
 
 	<delete id="reject">

@@ -1,10 +1,10 @@
 package cheche.core.builder;
 
+import cheche.common.utils.CheckUtils;
+import cheche.common.utils.JsonUtils;
 import cheche.core.builder.meta.ApplyContentsMeta;
 import cheche.core.builder.meta.ApproversMeta;
 import cheche.core.dto.template.TemplateContent;
-import common.util.tools.CheckUtils;
-import common.util.tools.JsonUtils;
 
 /**
  * 模板详情链式生成器
@@ -73,6 +73,6 @@ public class TemplateBuilder {
 				.and() //
 				.build();
 
-		System.out.println(JsonUtils.convert2Json(template));
+		System.out.println(JsonUtils.toJSONString(template));
 	}
 }

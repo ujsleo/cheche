@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cheche.dal.dao.ChecheTemplateHookMapper">
+  <resultMap id="BaseResultMap" type="cheche.dal.entity.ChecheTemplateHook">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="approver_id" jdbcType="BIGINT" property="approverId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="method" jdbcType="VARCHAR" property="method" />
+    <result column="body_data" jdbcType="VARCHAR" property="bodyData" />
+    <result column="header" jdbcType="VARCHAR" property="header" />
+    <result column="is_deleted" jdbcType="CHAR" property="isDeleted" />
+    <result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, approver_id, `type`, url, `method`, body_data, `header`, is_deleted, gmt_created, 
+    creator, gmt_modified, modifier
+  </sql>
+
+  <sql id="Hook_Column_List">
+    k.id, k.approver_id, k.`type`, k.url, k.`method`, k.body_data, k.`header`, k.is_deleted, k.gmt_created,
+    k.creator, k.gmt_modified, k.modifier
+  </sql>
+
+  <select id="findOne" resultMap="BaseResultMap">
+    SELECT
+        <include refid="Hook_Column_List"/>
+    FROM
+        cheche_template_hook k
+    LEFT JOIN cheche_template_approver r ON r.id = k.approver_id
+    LEFT JOIN cheche_template e ON e.id = r.template_id
+    LEFT JOIN cheche_apply_process s ON s.template_code = e.`code`
+    WHERE
+        s.id = #{processId,jdbcType=BIGINT}
+    AND
+        r.step = #{step,jdbcType=BIGINT}
+    AND
+        k.type = #{type,jdbcType=BIGINT}
+    LIMIT 1
+  </select>
+
+  <select id="findLst" resultMap="BaseResultMap">
+    SELECT * FROM cheche_template_hook
+    WHERE approver_id = #{approverId, jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteAll">
+    delete from cheche_template_hook where template_id = #{templateId,jdbcType=BIGINT}
+  </delete>
+
+</mapper>

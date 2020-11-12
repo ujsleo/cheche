@@ -9,6 +9,7 @@ public class ChecheTemplateApprover {
      * 主键
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**

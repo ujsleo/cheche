@@ -3,10 +3,10 @@ package cheche.core.builder.meta;
 import java.util.ArrayList;
 import java.util.List;
 
+import cheche.common.utils.CheckUtils;
 import cheche.core.builder.TemplateBuilder;
-import cheche.core.dto.template.ControlConfig;
 import cheche.core.dto.template.ControlItem;
-import common.util.tools.CheckUtils;
+import cheche.core.dto.template.control.ControlConfig;
 
 /**
  * 模板流程元信息

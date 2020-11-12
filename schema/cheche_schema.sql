@@ -4,7 +4,7 @@ CREATE TABLE `cheche_template` (
   `status` INT NOT NULL DEFAULT 1 COMMENT '模板状态：0-已停用 1-已启用',
   `name` VARCHAR(128) NOT NULL COMMENT '模板名称',
   `icon` VARCHAR(512) NOT NULL COMMENT '模板图标',
-  `group_id` BIGINT NOT NULL COMMENT '模板分组ID',
+  `group_id` BIGINT NOT NULL DEFAULT 1 COMMENT '模板分组ID',
   `is_deleted` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除N-未删除Y-已删除',
   `gmt_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `creator` varchar(32) NOT NULL DEFAULT 'cheche' COMMENT '创建人',
@@ -32,6 +32,25 @@ CREATE TABLE `cheche_template_approver` (
   PRIMARY KEY (`id`),
   INDEX `idx_template_id` (`template_id`)
 ) COMMENT='cheche审批规则' DEFAULT CHARSET=utf8mb4 ENGINE=InnoDB;
+
+CREATE TABLE `cheche_template_hook` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `template_id` BIGINT NOT NULL COMMENT '模板ID',
+  `approver_id` BIGINT NOT NULL COMMENT '审批规则ID',
+  `type` Integer NOT NULL COMMENT '回调类型。1-发起start 2-通过pass 4-驳回reject 8-撤回back',
+  `url` VARCHAR(512) COMMENT '请求地址',
+  `method` VARCHAR(16) COMMENT '请求方法POST GET',
+  `body_data` VARCHAR(1024) COMMENT '请求体JSON(支持使用模版变量)',
+  `header` VARCHAR(256) COMMENT '请求头',
+  `is_deleted` char(1) NOT NULL DEFAULT 'N' COMMENT '是否删除N-未删除Y-已删除',
+  `gmt_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `creator` varchar(32) NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `modifier` varchar(32) NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+  PRIMARY KEY (`id`),
+  UNIQUE `uniq_com` (`approver_id`,`type`),
+  INDEX `idx_template_id` (`template_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='cheche事件回调Hook';
 
 CREATE TABLE `cheche_template_control` (
   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -62,6 +81,7 @@ CREATE TABLE `cheche_template_group` (
   `modifier` varchar(32) NOT NULL DEFAULT 'cheche' COMMENT '修改人',
   PRIMARY KEY (`id`)
 ) COMMENT='cheche模板分组' DEFAULT CHARSET=utf8mb4 ENGINE=InnoDB;
+INSERT INTO cheche_template_group(id, name) VALUES(1, '其他');
 
 CREATE TABLE `cheche_apply_process` (
   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -80,7 +100,9 @@ CREATE TABLE `cheche_apply_process` (
   `creator` varchar(32) NOT NULL DEFAULT 'cheche' COMMENT '创建人',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT '修改时间',
   `modifier` varchar(32) NOT NULL DEFAULT 'cheche' COMMENT '修改人',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE `uniq_code` (`code`),
+  INDEX `idx_com` (`user`, `gmt_created`)
 ) COMMENT='cheche审批流程' DEFAULT CHARSET=utf8mb4 ENGINE=InnoDB;
 
 CREATE TABLE `cheche_apply_task` (
@@ -95,7 +117,8 @@ CREATE TABLE `cheche_apply_task` (
   `creator` varchar(32) NOT NULL DEFAULT 'cheche' COMMENT '创建人',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT '修改时间',
   `modifier` varchar(32) NOT NULL DEFAULT 'cheche' COMMENT '修改人',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX `idx_process_id` (`process_id`)
 ) COMMENT='cheche审批节点' DEFAULT CHARSET=utf8mb4 ENGINE=InnoDB;
 
 CREATE TABLE `cheche_apply_task_spot` (
@@ -113,7 +136,10 @@ CREATE TABLE `cheche_apply_task_spot` (
   `creator` varchar(32) NOT NULL DEFAULT 'cheche' COMMENT '创建人',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT '修改时间',
   `modifier` varchar(32) NOT NULL DEFAULT 'cheche' COMMENT '修改人',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX `idx_task_id` (`task_id`),
+  INDEX `idx_process_id` (`process_id`),
+  INDEX `idx_com` (`user`, `gmt_created`)
 ) COMMENT='cheche审批节点的关注' DEFAULT CHARSET=utf8mb4 ENGINE=InnoDB;
 
 CREATE TABLE `cheche_apply_control` (
@@ -127,7 +153,8 @@ CREATE TABLE `cheche_apply_control` (
   `creator` varchar(32) NOT NULL DEFAULT 'cheche' COMMENT '创建人',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT '修改时间',
   `modifier` varchar(32) NOT NULL DEFAULT 'cheche' COMMENT '修改人',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX `idx_process_id` (`process_id`)
 ) COMMENT='cheche审批申请数据' DEFAULT CHARSET=utf8mb4 ENGINE=InnoDB;
 
 CREATE TABLE `cheche_apply_event` (
@@ -141,5 +168,6 @@ CREATE TABLE `cheche_apply_event` (
   `creator` varchar(32) NOT NULL DEFAULT 'cheche' COMMENT '创建人',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT '修改时间',
   `modifier` varchar(32) NOT NULL DEFAULT 'cheche' COMMENT '修改人',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX `idx_process_id` (`process_id`)
 ) COMMENT='cheche审批事件' DEFAULT CHARSET=utf8mb4 ENGINE=InnoDB;

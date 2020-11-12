@@ -1,8 +1,8 @@
 package cheche.core.msg;
 
+import cheche.common.executor.AbstractExecutorTask;
 import cheche.core.dto.msg.SendMsgRequest;
 import cheche.core.dto.msg.SendMsgResponse;
-import common.util.executor.AbstractExecutorTask;
 
 /**
  * 发送消息的子任务（多实例，框架配置超时/重试逻辑）

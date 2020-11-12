@@ -34,7 +34,7 @@
 			WHERE cats.process_id = cap.id AND cats.step = cap.step) approver
 		FROM cheche_apply_process cap
 		LEFT JOIN cheche_template ct ON cap.template_code = ct.code
-		WHERE cap. USER = #{user}
+		WHERE cap.user = #{user}
 		<if test="status != null">
 			AND cap.status = #{status}
 		</if>
@@ -45,10 +45,10 @@
 		LIMIT #{offset}, #{rows}
 	</select>
 
-	<select id="cntTotalApply" resultType="java.lang.Integer">
+	<select id="cntMyApply" resultType="java.lang.Integer">
 		SELECT COUNT(1)
 		FROM cheche_apply_process cap
-		WHERE cap. USER = #{user}
+		WHERE cap.user = #{user}
 		<if test="status != null">
 			AND cap.status = #{status}
 		</if>
@@ -57,20 +57,40 @@
 		</if>
 	</select>
 
+	<select id="searchMyApply" resultType="cheche.core.dto.approval.MyApplySummary">
+		SELECT cap.id processId, cap.sn sn, cap.status processStatus, cap.user applyUser, cap.title title, cap.gmt_created applyDate, ct.name templateName,
+			(SELECT group_concat(cats.`user`)
+			FROM cheche_apply_task_spot cats
+			WHERE cats.process_id = cap.id AND cats.step = cap.step) approver
+		FROM cheche_apply_process cap
+		LEFT JOIN cheche_template ct ON cap.template_code = ct.code
+		WHERE cap.user = #{user}
+		AND CONCAT(IFNULL(cap.sn,''), IFNULL(cap.user,''), IFNULL(cap.title,'')) LIKE CONCAT('%', #{wd}, '%')
+		ORDER BY cap.gmt_created DESC
+		LIMIT #{offset}, #{rows}
+	</select>
+
+	<select id="cntSearchMyApply" resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		FROM cheche_apply_process cap
+		WHERE cap.user = #{user}
+		AND CONCAT(IFNULL(cap.sn,''), IFNULL(cap.user,''), IFNULL(cap.title,'')) LIKE CONCAT('%', #{wd}, '%')
+	</select>
+
 	<update id="completed">
-		UPDATE cheche_apply_process SET status = 16 WHERE id = #{id}
+		UPDATE cheche_apply_process SET status = 16, modifier = #{user} WHERE id = #{id}
 	</update>
 
 	<update id="terminated">
-		UPDATE cheche_apply_process SET status = 8 AND step = #{step} WHERE id = #{id}
+		UPDATE cheche_apply_process SET status = 8, step = #{step}, modifier = #{user} WHERE id = #{id}
 	</update>
 
 	<update id="withdraw">
-		UPDATE cheche_apply_process SET status = 0 AND step = 0 WHERE id = #{id}
+		UPDATE cheche_apply_process SET status = -1, step = 0, modifier = #{user} WHERE id = #{id}
 	</update>
 
 	<update id="updateStep">
-		UPDATE cheche_apply_process SET step = #{step} WHERE id = #{id}
+		UPDATE cheche_apply_process SET step = #{step}, modifier = #{user} WHERE id = #{id}
 	</update>
 
 </mapper>

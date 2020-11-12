@@ -33,7 +33,7 @@
 		LEFT JOIN cheche_apply_process cap ON cats.process_id = cap.id
 		LEFT JOIN cheche_template ct ON cap.template_code = ct.code
 		LEFT JOIN cheche_apply_task cat ON cap.step = cat.step AND cat.id = cats.task_id
-		WHERE cats. USER = #{user}
+		WHERE cats.user = #{user}
 		<if test="status != null">
 			AND cats.status = #{status}
 		</if>
@@ -44,11 +44,11 @@
 		LIMIT #{offset}, #{rows}
 	</select>
 
-	<select id="cntTotalApproval" resultType="java.lang.Integer">
+	<select id="cntMyApproval" resultType="java.lang.Integer">
 		SELECT count(1)
 		FROM cheche_apply_task_spot cats
 		LEFT JOIN cheche_apply_process cap ON cats.process_id = cap.id
-		WHERE cats. USER = #{user}
+		WHERE cats.user = #{user}
 		<if test="status != null">
 			AND cats.status = #{status}
 		</if>
@@ -57,9 +57,29 @@
 		</if>
 	</select>
 
+	<select id="searchMyApproval" resultType="cheche.core.dto.approval.MyApprovalSummary">
+		SELECT cap.id processId, cap.sn sn, cap.status processStatus, cap.user applyUser, cap.title title, cap.start_date applyDate, ct.name templateName, cat.id taskId, cat.status taskStatus
+		FROM cheche_apply_task_spot cats
+		LEFT JOIN cheche_apply_process cap ON cats.process_id = cap.id
+		LEFT JOIN cheche_template ct ON cap.template_code = ct.code
+		LEFT JOIN cheche_apply_task cat ON cap.step = cat.step AND cat.id = cats.task_id
+		WHERE cats.user = #{user}
+		AND CONCAT(IFNULL(cap.sn,''), IFNULL(cap.user,''), IFNULL(cap.title,'')) LIKE CONCAT('%', #{wd}, '%')
+		ORDER BY cats.gmt_created DESC
+		LIMIT #{offset}, #{rows}
+	</select>
+
+	<select id="cntSearchMyApproval" resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM cheche_apply_task_spot cats
+		LEFT JOIN cheche_apply_process cap ON cats.process_id = cap.id
+		WHERE cats.user = #{user}
+		AND CONCAT(IFNULL(cap.sn,''), IFNULL(cap.user,''), IFNULL(cap.title,'')) LIKE CONCAT('%', #{wd}, '%')
+	</select>
+
 	<update id="pass">
 		DELETE FROM cheche_apply_task_spot WHERE task_id = #{taskId} AND user != #{user};
-		UPDATE cheche_apply_task_spot SET status = 16, remark = #{remark} WHERE task_id = #{taskId} AND user = #{user};
+		UPDATE cheche_apply_task_spot SET status = 16, remark = #{remark}, modifier = #{user} WHERE task_id = #{taskId} AND user = #{user};
 	</update>
 
 	<delete id="reject">
@@ -71,7 +91,7 @@
 	</delete>
 
 	<update id="transfer">
-		UPDATE cheche_apply_task_spot SET user = #{agent}, assigner = #{user} WHERE task_id = #{taskId} AND user = #{user}
+		UPDATE cheche_apply_task_spot SET user = #{agent}, assigner = #{user}, modifier = #{user} WHERE task_id = #{taskId} AND user = #{user}
 	</update>
 
 	<insert id="batchInsert" parameterType="java.util.List">

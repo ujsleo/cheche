@@ -13,10 +13,10 @@ import tk.mybatis.mapper.common.Mapper;
  */
 public interface ChecheApplyEventMapper extends Mapper<ChecheApplyEvent> {
 	/**
-	 * 查找所有审批事件
+	 * 获取事件列表
 	 * 
 	 * @param processId 流程ID
 	 * @return
 	 */
-	List<ChecheApplyEvent> findAll(Long processId);
+	List<ChecheApplyEvent> findLst(Long processId);
 }

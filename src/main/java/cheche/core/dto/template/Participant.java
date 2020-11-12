@@ -7,25 +7,29 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
+import cheche.core.dto.constant.ChecheConst;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 审批的参与者
  * 
  * @author jieli
  *
  */
+@ApiModel(value = "审批的参与者")
 public abstract class Participant {
-	private final static String SEPARATOR = ",";
-	/** 域账号列表，以逗号,分隔 */
+	@ApiModelProperty(value = "域账号列表，以逗号,分隔")
 	private String user;
-	/** 角色列表，以逗号,分隔 */
+	@ApiModelProperty(value = "角色列表，以逗号,分隔")
 	private String role;
-	/** 管理员域账号列表，以逗号,分隔 */
+	@ApiModelProperty(value = "管理员域账号列表，以逗号,分隔")
 	private String admin;
 
 	/** 域账号的集合 */
 	public Set<String> users() {
 		if (StringUtils.isNotEmpty(user)) {
-			List<String> lst = Arrays.asList(StringUtils.split(user, SEPARATOR));
+			List<String> lst = Arrays.asList(StringUtils.split(user, ChecheConst.SEPARATOR));
 			return new HashSet<>(lst);
 		}
 		return new HashSet<>();
@@ -42,7 +46,7 @@ public abstract class Participant {
 	/** 管理员域账号的集合 */
 	public Set<String> admins() {
 		if (StringUtils.isNotEmpty(admin)) {
-			List<String> lst = Arrays.asList(StringUtils.split(admin, SEPARATOR));
+			List<String> lst = Arrays.asList(StringUtils.split(admin, ChecheConst.SEPARATOR));
 			return new HashSet<>(lst);
 		}
 		return new HashSet<>();

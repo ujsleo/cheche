@@ -1,12 +1,13 @@
 package cheche.core.auto;
 
+import cheche.common.executor.AbstractExecutorTask;
+import cheche.common.utils.ContextUtils;
 import cheche.core.dto.apply.ApproveOpt;
 import cheche.core.dto.apply.RejectOpt;
 import cheche.core.dto.auto.AutoApprovalRequest;
+import cheche.core.dto.constant.ChecheConst;
 import cheche.core.service.OaTaskSvc;
 import cheche.core.spi.IAutoOaTask;
-import common.util.executor.AbstractExecutorTask;
-import common.util.tools.context.ContextUtils;
 
 /**
  * 自动审批任务
@@ -28,14 +29,15 @@ public class AutoApprovalTask extends AbstractExecutorTask<AutoApprovalRequest, 
 		if (oaTask.canAutoPass()) {
 			ApproveOpt approveOpt = new ApproveOpt();
 			approveOpt.setTaskId(request.getTaskId());
-			approveOpt.setUser("cheche");
+			approveOpt.setUser(ChecheConst.SYS_APPROVAL);
 			approveOpt.setRemark("系统自动审批通过");
 			ContextUtils.getContext().getBean(OaTaskSvc.class).pass(approveOpt);
 		} else {
 			RejectOpt rejectOpt = new RejectOpt();
 			rejectOpt.setTaskId(request.getTaskId());
-			rejectOpt.setUser("cheche");
+			rejectOpt.setUser(ChecheConst.SYS_APPROVAL);
 			rejectOpt.setRemark("系统自动驳回");
+			rejectOpt.setStep(0); // 默认驳回到开始节点
 			ContextUtils.getContext().getBean(OaTaskSvc.class).reject(rejectOpt);
 		}
 		return null;

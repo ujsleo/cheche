@@ -45,6 +45,7 @@ public class ChecheTemplateControl {
     /**
      * 是否必填：1-必填 0-选填
      */
+    @Column(name = "`require`")
     private Integer require;
 
     /**
